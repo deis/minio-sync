@@ -2,6 +2,7 @@ apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   name: minio-sync
+  namespace: deis
   labels:
     heritage: helm
 spec:
@@ -13,20 +14,25 @@ spec:
     spec:
       containers:
       - name:  minio-sync
-        image: quay.io/rimusz/btsync-alpine
+        image: quay.io/rimusz/minio-sync
         resources:
           limits:
             cpu: 100m
         volumeMounts:
+        - name: btsync-secret
+          mountPath: /var/run/secrets/deis/minio/secret
+          readOnly: true
         - name: config
           mountPath: /config
-#          readOnly: true
         - name: minio-data
           mountPath: /mnt/minio/data
       volumes:
-      - name: config
+      - name: btsync-secret
         secret:
-          secretName: btsync.conf
+          secretName: minio-sync
+      - name: config
+        hostPath:
+          path: /mnt/minio/config
       - name: minio-data
         hostPath:
           path: /mnt/minio/data

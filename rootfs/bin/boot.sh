@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# update btsync.conf with SECRET KEY from env var
-
+# update btsync.conf with the SECRET KEY
+BTSYNC_SEC=$(cat /var/run/secrets/deis/minio/secret/btsync-secret)
+sed -i "s|_SECRECT_|$BTSYNC_SEC|" /opt/btsync/btsync.conf
 
 # magically renumber the nobody user
 sed -i "s|nobody:x:65534:65534:|nobody:x:$USERID:$GROUPID:|" /etc/passwd
