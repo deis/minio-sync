@@ -9,10 +9,10 @@ sed -i "s|nobody:x:65534:65534:|nobody:x:$USERID:$GROUPID:|" /etc/passwd
 sed -i "s|nobody:x:65534:|nobody:x:$GROUPID:|" /etc/group
 
 #
-rm -fr /config/btsync/.sync
+#rm -fr /config/btsync/.sync
 mkdir -p /config/btsync/.sync
 chown -R nobody:nobody /config
-rm -fr /mnt/minio/data/.sync
+#rm -fr /mnt/minio/data/.sync
 mkdir /mnt/minio/data/.sync
 chown -R nobody:nobody /mnt/minio/data
 
