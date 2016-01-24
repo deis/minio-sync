@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: minio-sync
+  labels:
+    heritage: helm
+spec:
+  template:
+    metadata:
+      name:  minio-sync
+      labels:
+        heritage: helm
+    spec:
+      containers:
+      - name:  minio-sync
+        image: quay.io/rimusz/btsync-alpine
+        resources:
+          limits:
+            cpu: 100m
+        volumeMounts:
+        - name: config
+          mountPath: /config
+#          readOnly: true
+        - name: minio-data
+          mountPath: /mnt/minio/data
+      volumes:
+      - name: config
+        secret:
+          secretName: btsync.conf
+      - name: minio-data
+        hostPath:
+          path: /mnt/minio/data
