@@ -1,10 +1,11 @@
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
-  name: minio-sync
+  name: deis-minio-sync
   namespace: deis
   labels:
     heritage: helm
+    release: v2-beta
 spec:
   template:
     metadata:
@@ -14,7 +15,8 @@ spec:
     spec:
       containers:
       - name:  minio-sync
-        image: quay.io/rimusz/minio-sync
+        image: quay.io/deisci/minio-sync:v2-beta
+        imagePullPolicy: Always
         resources:
           limits:
             cpu: 100m

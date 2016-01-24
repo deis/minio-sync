@@ -1,4 +1,5 @@
 FROM alpine:3.3
+#
 
 # Download and install glibc
 RUN apk add --update curl && \
@@ -12,10 +13,10 @@ RUN apk add --update curl && \
   rm -rf /var/cache/apk/*
 
 # Download and install btsync and all required components
-RUN apk add tar && \
+RUN apk add --update tar && \
     curl -o /usr/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.4/gosu-amd64" && \
     chmod +x /usr/bin/gosu && \
-    curl -s -k -L "https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz" | tar -xzf - -C /usr/bin/btsync && \
+    curl -s -k -L "https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz" | tar -xzf - -C /usr/bin && \
     chmod +x /usr/bin/btsync && \
     mkdir -p /opt/btsync && \
     apk del tar && \

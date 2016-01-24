@@ -8,9 +8,13 @@ sed -i "s|_SECRECT_|$BTSYNC_SEC|" /opt/btsync/btsync.conf
 sed -i "s|nobody:x:65534:65534:|nobody:x:$USERID:$GROUPID:|" /etc/passwd
 sed -i "s|nobody:x:65534:|nobody:x:$GROUPID:|" /etc/group
 
-# provide a nice nobody
-mkdir -p /config/.sync
-chown -R nobody:nobody /config/*
+#
+rm -fr /config/btsync/.sync
+mkdir -p /config/btsync/.sync
+chown -R nobody:nobody /config
+rm -fr /mnt/minio/data/.sync
+mkdir /mnt/minio/data/.sync
+chown -R nobody:nobody /mnt/minio/data
 
 exec gosu nobody:nobody \
-  /usr/bin/btsync --nodaemon --config /opt/btsync/btsync.conf --log /config/btsync.log
+  /usr/bin/btsync --nodaemon --config /opt/btsync/btsync.conf --log /config/btsync/btsync.log
