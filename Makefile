@@ -17,6 +17,10 @@ all: docker-build docker-push
 
 # For cases where we're building from local
 # We also alter the RC file to set the image name.
+build:
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags '-s' -o rootfs/bin/filecheck filecheck.go || exit 1
+	@$(call check-static-binary,rootfs/bin/filecheck)
+
 docker-build:
 	docker build --rm -t ${IMAGE} rootfs
 	perl -pi -e "s|image: [a-z0-9.:]+\/deisci\/${SHORT_NAME}:[0-9a-z-.]+|image: ${IMAGE}|g" ${DS}
@@ -44,3 +48,12 @@ kube-clean:
 	kubectl delete ds ${SHORT_NAME}
 
 .PHONY: all build kube-up kube-down deploy
+
+define check-static-binary
+		if file $(1) | egrep -q "(statically linked|Mach-O)"; then \
+		  echo ""; \
+		else \
+		  echo "The binary file $(1) is not statically linked. Build canceled"; \
+		  exit 1; \
+		fi
+endef

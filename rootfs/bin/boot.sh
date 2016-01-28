@@ -16,5 +16,6 @@ chown -R nobody:nobody /config
 mkdir /mnt/minio/data/.sync
 chown -R nobody:nobody /mnt/minio/data
 
+filecheck&
 exec gosu nobody:nobody \
   /usr/bin/btsync --nodaemon --config /opt/btsync/btsync.conf --log /config/btsync/btsync.log
